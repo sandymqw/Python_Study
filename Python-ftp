@@ -47,7 +47,7 @@ def up_load_many_file(ftp, remotepath, localpath):
 
 
 if __name__ == '__main__':
-    ftp = ftp_connect(host='10.209.156.231', user='spd', password='py_spd')
+    ftp = ftp_connect(host='192.168.1.244', user='spd', password='spd')
     # up_load_file(ftp, '/home/mqw/cw_dr/', 'E:/Python/python_ftp/ftp_test.txt')
 
     # down_load_file(ftp,'/home/mqw/cw_dr/cfg.ini','E:/Python/python_ftp/download/')

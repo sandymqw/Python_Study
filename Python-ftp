@@ -1,0 +1,63 @@
+# coding:utf8
+from ftplib import FTP
+import os
+
+
+debug = 1
+
+
+def print_debug(content):
+    if debug != 1:
+        return
+    else:
+        print(content)
+
+
+def ftp_connect(host, user, password):
+    ftp = FTP(host=host, user=user, passwd=password)
+    # ftp = FTP()
+    # ftp.set_debuglevel(2)
+    # ftp.connect(host, port)
+    # ftp.login(user, password)
+    print_debug(ftp.getwelcome())  # 获取欢迎信息
+    return ftp
+
+
+def up_load_file(ftp, remotepath, localpath):
+    file_handle = open(localpath, 'rb')
+    print_debug(ftp.pwd())
+    ftp.cwd(os.path.dirname(remotepath))  # 更改路径
+    print_debug(ftp.pwd())
+    print_debug(ftp.nlst())
+    ftp.storbinary("STOR {}".format(os.path.basename(localpath)), file_handle)
+    print_debug('up load is ok')
+
+
+def up_load_many_file(ftp, remotepath, localpath):
+    print_debug(ftp.pwd())
+    ftp.cwd(os.path.dirname(remotepath))
+    print_debug(ftp.pwd())
+    for i in ftp.nlst():
+        ftp.delete(i)
+    for filename in os.listdir(localpath):  # 取当本地前目录下的文件名
+        file_handle = open(localpath + filename, 'rb')
+        ftp.storbinary("STOR {}".format(filename), file_handle)
+    print_debug('up load is ok')
+
+
+
+if __name__ == '__main__':
+    ftp = ftp_connect(host='10.209.156.231', user='spd', password='py_spd')
+    # up_load_file(ftp, '/home/mqw/cw_dr/', 'E:/Python/python_ftp/ftp_test.txt')
+
+    # down_load_file(ftp,'/home/mqw/cw_dr/cfg.ini','E:/Python/python_ftp/download/')
+    up_load_many_file(ftp, '/home/spd/java/web/tomcat7/apache-tomcat-7.0.88/webapps/compInfo/WEB-INF/files/img/yx/01/', '/home/spd/test/')
+
+    # commands = ['ls', 'pwd', 'cd /home/mqw/cw_dr/', 'pwd', 'python3 excelAnalytical.py']
+    # commands = ['pwd', 'cd /home/mqw/cw_dr/', 'ls', 'python3 excelAnalytical.py']
+    # do_telnet('192.168.1.244','mqw','mqw',commands)
+    # down_load_many_file(ftp,'/home/mqw/cw_dr/','E:/Python/python_ftp/download/')
+    # ftp.quit()
+    # telnet_test('192.168.1.244','mqw','mqw')
+
+
